@@ -1,0 +1,116 @@
+<div id="map"></div>
+
+<app-header></app-header>
+
+<aside class="main" id="sidebar">
+    <div class="main-header">
+        <div class="main-title">Оформление доставки</div>
+        <div class="main-text">Выберите параметры для расчета отправления</div>
+    </div>
+
+    <div class="main-content">
+        <div class="main-route" [formGroup]="routeForm">
+            <div class="main-block-title">Маршрут</div>
+            <div class="main-fields">
+                <div class="main-field" id="fromField">
+                    <div class="main-pin"></div>
+                    <input id="from" formControlName="from" placeholder="Откуда: начните вводить адрес" autocomplete="off"/>
+                    <div class="main-ac" id="fromAc" role="listbox" aria-label="Подсказки адресов"></div>
+                </div>
+
+                <div class="main-field" id="toField">
+                    <div class="main-pin"></div>
+                    <input id="to" formControlName="to" placeholder="Куда: начните вводить адрес" autocomplete="off"/>
+                    <div class="main-ac" id="toAc" role="listbox" aria-label="Подсказки адресов"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-package">
+            <div class="main-block-title">Размер посылки</div>
+
+            <div class="main-sizes">
+                @for (size of sizes; track size.value) {
+                    <div class="main-size-card" [class.is-active]="routeForm.value.size === size.value"
+                         (click)="selectSize(size.value)">
+                        <div class="main-size-top">
+                            <div class="main-size-label">{{ size.value | uppercase }}</div>
+                            <div class="main-size-rate">{{ size.rate }} ₽/км</div>
+                        </div>
+                        <div class="main-size-media" [class]="size.value === 'max' ? 'main-size-media-palleta' : ''">
+                            <img [src]="'images/sizes/' + size.value + '.png'" [alt]="size.value"/>
+                        </div>
+                        <div class="main-size-description" [innerHTML]="size.description"></div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="main-speed">
+            <div class="main-block-title">Скорость доставки</div>
+
+            <div class="main-speeds">
+                @for (speed of speeds; track speed.value) {
+                    <div class="main-speed-card" [class.is-active]="routeForm.value.speed === speed.value"
+                         (click)="selectSpeed(speed.value)">
+                        <img class="main-speed-media" src="images/icons/{{speed.value}}.svg" alt="Speed"/>
+                        <div class="main-speed-description">{{ speed.label }}</div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="main-calculate-block">
+            <button id="calc" class="button calculate-button" type="button" [disabled]="routeForm.invalid"
+                    (click)="calculate()">Рассчитать</button>
+        </div>
+
+        <div class="main-result" id="result">
+            <div class="main-result-title">Расчеты вашего заказа</div>
+            <div class="main-result-lines">
+                <div class="main-result-line"><span>Расстояние</span><span id="distanceValue">{{ calculationResult() ? calculationResult().distance + ' км' : '—' }}</span></div>
+                <div class="main-result-line"><span>Доставим через</span><span id="durationValue">{{ calculationResult() ? calculationResult().duration + ' дн.' : '—' }}</span></div>
+                <div class="main-result-line"><span>Тариф</span><span id="rateValue">{{ calculationResult() ? calculationResult().rate + ' ₽/км' : '—' }}</span></div>
+            </div>
+            <div class="main-price">
+                <div class="main-price-label">Итого</div>
+                <div class="main-price-value" id="totalValue">{{ calculationResult() ? calculationResult().total : '—' }}</div>
+            </div>
+        </div>
+
+        <div class="main-order-box">
+            <div class="main-order-form" id="orderForm" [formGroup]="orderForm"
+                 [style.display]="orderId() ? 'none' : null">
+                <div class="main-order-title">Оформление доставки</div>
+                <div class="main-block-info-row">
+                    <div class="main-block-title">Контакты</div>
+                    <div class="order-fields">
+                        <div class="main-field">
+                            <input id="customerName" formControlName="name" placeholder="Ваше имя" autocomplete="off"/>
+                        </div>
+                        <div class="main-field">
+                            <input id="customerPhone" formControlName="phone" placeholder="Ваш телефон" autocomplete="off" inputmode="tel"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-block-info-row extra-info">
+                    <div class="main-block-title">Дополнительная информация</div>
+                    <div class="main-field textarea">
+                        <textarea id="comment" formControlName="comment" placeholder="Детали доставки и комментарии"></textarea>
+                    </div>
+                </div>
+                <button id="submit" class="button main-submit-request" type="button"
+                        [disabled]="!calculationResult() || orderForm.invalid" (click)="submitOrder()">Отправить
+                    заявку
+                </button>
+            </div>
+
+            <div class="main-order-success" id="orderSuccess" [class.is-visible]="orderId()">
+                <div class="main-success-icon">✓</div>
+                <div class="main-success-title">Заявка отправлена!</div>
+                <div class="main-success-title">Номер отправления – <span id="orderId">{{ orderId() }}</span></div>
+                <div class="main-success-subtitle">Мы скоро свяжемся с вами</div>
+            </div>
+        </div>
+    </div>
+</aside>

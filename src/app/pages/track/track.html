@@ -1,0 +1,73 @@
+<div class="container">
+    <app-header></app-header>
+
+    <main class="track-content">
+        <section class="track-card track-search">
+            <div class="track-title">Отследить посылку</div>
+            <div class="track-action">
+                <div class="main-field track-field">
+                    <input id="trackNumber" [(ngModel)]="trackNumber" placeholder="Введите номер посылки" autocomplete="off"/>
+                </div>
+                <button id="trackButton" class="button track-button" type="button" (click)="trackShipment()">Отследить</button>
+            </div>
+        </section>
+
+        <section class="track-card track-result" id="trackResult" [class.is-visible]="trackResult()">
+            <div class="track-result-header">
+                <div class="track-id" id="trackIdValue">{{ trackResult()?.id }}</div>
+                <div class="track-routes">
+                    <div class="track-route">
+                        <div class="track-route-pin">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="orange" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                            </svg>
+                        </div>
+                        <div class="track-route-address" id="trackFromValue">
+                            Откуда: {{ trackResult()?.route.from }}
+                        </div>
+                    </div>
+                    <div class="track-route track-route-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"/>
+                        </svg>
+                    </div>
+                    <div class="track-route">
+                        <div class="track-route-pin">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="green" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                            </svg>
+                        </div>
+                        <div class="track-route-address" id="trackToValue">
+                            Куда: {{ trackResult()?.route.to }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="track-info">
+                <div class="track-status-title">Статус данной посылки:</div>
+                <div class="track-status-list" id="trackStatusList">
+                    @for (status of trackResult()?.statuses; track status.type + status.date) {
+                        <div class="track-status" [class]="status.type">
+                            <img class="track-status-icon" [src]="'images/icons/' + status.type + '.svg'"
+                                 [alt]="status.label"/>
+                            <div class="track-status-text">
+                                <div class="track-status-text-state">{{ status.label }}</div>
+                                <div class="track-status-text-date">{{ status.date }}</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
