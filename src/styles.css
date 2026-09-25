@@ -66,8 +66,6 @@ body {
     background: rgb(241 241 241);
 }
 
-/* ===== Общие стили полей формы (урок 3, база для order и track) ===== */
-
 .main-field {
     display: flex;
     align-items: center;
