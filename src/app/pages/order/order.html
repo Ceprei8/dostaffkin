@@ -69,8 +69,8 @@
         </div>
 
         <div class="main-calculate-block">
-            <button id="calc" class="button calculate-button" type="button" [disabled]="routeForm.invalid"
-                    (click)="calculate()">Рассчитать</button>
+            <button id="calc" class="button calculate-button" type="button" [disabled]="routeForm.invalid || isCalculating()"
+                    (click)="calculate()">{{ isCalculating() ? 'Считаем...' : 'Рассчитать' }}</button>
         </div>
 
         @if (isCalculating()) {
@@ -80,15 +80,16 @@
         }
 
         <div class="main-result" id="result">
+            @let result = calculationResult();
             <div class="main-result-title">Расчеты вашего заказа</div>
             <div class="main-result-lines">
-                <div class="main-result-line"><span>Расстояние</span><span id="distanceValue">{{ calculationResult() ? calculationResult().distance + ' км' : '—' }}</span></div>
-                <div class="main-result-line"><span>Доставим через</span><span id="durationValue">{{ calculationResult() ? calculationResult().duration + ' дн.' : '—' }}</span></div>
-                <div class="main-result-line"><span>Тариф</span><span id="rateValue">{{ calculationResult() ? calculationResult().rate + ' ₽/км' : '—' }}</span></div>
+                <div class="main-result-line"><span>Расстояние</span><span id="distanceValue">{{ result ? result.distance + ' км' : '—' }}</span></div>
+                <div class="main-result-line"><span>Доставим через</span><span id="durationValue">{{ result ? result.duration + ' дн.' : '—' }}</span></div>
+                <div class="main-result-line"><span>Тариф</span><span id="rateValue">{{ result ? result.rate + ' ₽/км' : '—' }}</span></div>
             </div>
             <div class="main-price">
                 <div class="main-price-label">Итого</div>
-                <div class="main-price-value" id="totalValue">{{ calculationResult() ? calculationResult().total : '—' }}</div>
+                <div class="main-price-value" id="totalValue">{{ result ? result.total : '—' }}</div>
             </div>
         </div>
 
