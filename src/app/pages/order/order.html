@@ -73,6 +73,12 @@
                     (click)="calculate()">Рассчитать</button>
         </div>
 
+        @if (isCalculating()) {
+            <div class="main-loader" id="calcLoader">
+                <div class="main-loader-spinner"></div>
+            </div>
+        }
+
         <div class="main-result" id="result">
             <div class="main-result-title">Расчеты вашего заказа</div>
             <div class="main-result-lines">

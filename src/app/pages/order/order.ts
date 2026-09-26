@@ -26,6 +26,7 @@ export class Order implements OnInit {
 
     public orderId: any = signal(null);
     public calculationResult: any = signal(null);
+    public isCalculating = signal(false);
 
     constructor(private formBuilder: FormBuilder, private deliveryApi: DeliveryApi) {
         this.routeForm = this.formBuilder.group({
@@ -64,11 +65,12 @@ export class Order implements OnInit {
     }
 
     public calculate() {
-        this.calculationResult.set(null);
-
         if (!this.map || this.routeForm.invalid) {
             return;
         }
+
+        this.isCalculating.set(true);
+        this.calculationResult.set(null);
 
         const {from, to, size, speed} = this.routeForm.getRawValue();
 
@@ -114,6 +116,7 @@ export class Order implements OnInit {
                     total,
                     speed
                 });
+                this.isCalculating.set(false);
             } catch (err) {
                 this.failedCalculation();
             }
@@ -123,6 +126,7 @@ export class Order implements OnInit {
     }
 
     private failedCalculation() {
+        this.isCalculating.set(false);
         this.calculationResult.set(null);
         alert('Не удалось построить маршрут. Проверьте адреса и выбранные параметры.');
     }
