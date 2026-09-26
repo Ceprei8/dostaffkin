@@ -18,11 +18,19 @@
                     <div class="main-ac" id="fromAc" role="listbox" aria-label="Подсказки адресов"></div>
                 </div>
 
+                @if (this.routeForm.get('from')?.invalid && (this.routeForm.get('from')?.dirty || this.routeForm.get('from')?.touched)) {
+                    <label for="from" class="input-error">Заполните поле Откуда</label>
+                }
+
                 <div class="main-field" id="toField">
                     <div class="main-pin"></div>
                     <input id="to" formControlName="to" placeholder="Куда: начните вводить адрес" autocomplete="off"/>
                     <div class="main-ac" id="toAc" role="listbox" aria-label="Подсказки адресов"></div>
                 </div>
+
+                @if (this.routeForm.get('to')?.invalid && (this.routeForm.get('to')?.dirty || this.routeForm.get('to')?.touched)) {
+                    <label for="from" class="input-error">Заполните поле Куда</label>
+                }
             </div>
         </div>
 
@@ -88,8 +96,18 @@
                         <div class="main-field">
                             <input id="customerName" formControlName="name" placeholder="Ваше имя" autocomplete="off"/>
                         </div>
+                        <div>
+                            @if (this.orderForm.get('name')?.invalid && (this.orderForm.get('name')?.dirty || this.orderForm.get('name')?.touched)) {
+                                <label for="customerName" class="input-error">Заполните имя</label>
+                            }
+                        </div>
                         <div class="main-field">
                             <input id="customerPhone" formControlName="phone" placeholder="Ваш телефон" autocomplete="off" inputmode="tel"/>
+                        </div>
+                        <div>
+                            @if (this.orderForm.get('phone')?.invalid && (this.orderForm.get('phone')?.dirty || this.orderForm.get('phone')?.touched)) {
+                                <label for="customerName" class="input-error">Заполните телефон</label>
+                            }
                         </div>
                     </div>
                 </div>

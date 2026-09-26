@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Header } from '../../header/header';
+import { DeliveryApi } from '../../services/delivery-api';
 
 @Component({
   selector: 'app-track',
@@ -11,6 +12,8 @@ import { Header } from '../../header/header';
 export class Track {
   trackNumber = '';
   trackResult: any = signal(null);
+
+  constructor(private deliveryApi: DeliveryApi) {}
 
   trackShipment(): void {
     const rawValue = this.trackNumber.trim();
@@ -27,20 +30,13 @@ export class Track {
       return;
     }
 
-    this.trackResult.set({
-      id: 1,
-      route: {
-        from: 'Москва, улица Арбат, 1',
-        to: 'Минск, проспект Независимости, 58'
-      },
-      statuses: [
-        {type: 'created', label: 'Создан', date: '10.01.2026'},
-        {type: 'in-way', label: 'В пути: Вязьма', date: '15.01.2026'},
-        {type: 'in-way', label: 'В пути: Орша', date: '16.01.2026'},
-        {type: 'in-way', label: 'В пути: Минск', date: '18.01.2026'},
-        {type: 'ready', label: 'Готов к выдаче', date: '25.01.2026'},
-        {type: 'done', label: 'Вручен', date: '27.01.2026'}
-      ]
+    this.deliveryApi.getDeliveryInfo(numericValue).subscribe((response) => {
+      if ('error' in response) {
+        alert(response.error);
+        return;
+      }
+
+      this.trackResult.set(response);
     });
   }
 }
